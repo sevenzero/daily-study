@@ -56,7 +56,7 @@ class Solution:
     def longestCommonPrefix_4(self, strs: List[str]) -> str:
         if len(strs) == 0:
             return ''
-        return self.split_list(strs, 0, len(strs)-1)
+        return self.split_list(strs, 0, len(strs) - 1)
 
     def split_list(self, strs, start, end):
         if start == end:
@@ -74,10 +74,30 @@ class Solution:
                 return s[:i]
         return s[:min_len]
 
+    def longestCommonPrefix_5(self, strs: List[str]) -> str:
+        if len(strs) == 0:
+            return ''
+
+        def is_common_prefix(prefix, str_list):
+            for s in str_list:
+                if s[:len(prefix)] != prefix:
+                    return False
+            return True
+
+        min_str = min(strs, key=len)
+        start, end = 0, len(min_str)
+        while start < end:
+            mid = (end + start + 1) // 2
+            if is_common_prefix(min_str[:mid], strs):
+                start = mid
+            else:
+                end = mid - 1
+        return min_str[:(end + start) // 2]
+
 
 if __name__ == '__main__':
     s = Solution()
-    test_data = [["flower", "flow", "flight"], ["dog", "racecar", "car"], ['aa', 'a']]
+    test_data = [[], ["flower", "flow", "flight"], ["dog", "racecar", "car"], ['aa', 'a']]
     test_res = ["fl", ""]
     for i in test_data:
-        print(s.longestCommonPrefix_4(i))
+        print(s.longestCommonPrefix_5(i))

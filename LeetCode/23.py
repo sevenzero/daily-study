@@ -17,7 +17,7 @@ class ListNode:
 class Solution:
     def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         if len(lists) == 0:
-            return None
+            return lists
         l1 = lists[0]
         for l2 in lists[1:]:
             l1 = self.mergeTwoLists(l1, l2)
@@ -41,6 +41,18 @@ class Solution:
             t.next = q
         return head.next
 
+    def mergeKLists_2(self, lists: List[ListNode]) -> ListNode:
+        num_list = len(lists)
+        interval = 1
+        while interval < num_list:
+            # 注意这里的循环条件，因为如果按照(0,1), (2,3)...(k-1, k)分组，对于数量奇偶不同的列表，临界条件处理比较复杂，
+            # 所以采用一头一尾组合，(0,k-1), (1,k-2)...的方式分组
+            for i in range(0, num_list - interval, interval * 2):
+                # 产生的新链表放在了偶数索引的位置
+                lists[i] = self.mergeTwoLists(lists[i], lists[i + interval])
+            interval *= 2
+        return lists[0] if num_list > 0 else lists
+
 if __name__ == '__main__':
     node1 = ListNode(1)
     node2 = ListNode(2)
@@ -54,7 +66,7 @@ if __name__ == '__main__':
     node6 = ListNode(6)
     node5.next = node6
     s = Solution()
-    res = s.mergeKLists([node1, node4, node5])
+    res = s.mergeKLists_2([])
     while res:
         print(res.val)
         res = res.next
