@@ -16,7 +16,7 @@ class ListNode:
 
 class Solution:
     # 迭代法
-    def swapPairs(self, head: ListNode) -> ListNode:
+    def swapPairs_iterate(self, head: ListNode) -> ListNode:
         # 两个节点以下的链表直接返回
         if not head or not head.next:
             return head
@@ -34,12 +34,12 @@ class Solution:
             return extra_head.next
 
     # 递归法
-    def swapPairs_2(self, head: ListNode) -> ListNode:
+    def swapPairs_recursive(self, head: ListNode) -> ListNode:
         if not head or not head.next:
             return head
         first_node = head
         second_node = head.next
-        first_node.next = self.swapPairs(second_node.next)
+        first_node.next = self.swapPairs_recursive(second_node.next)
         second_node.next = first_node
         return second_node
 
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     node6 = ListNode(6)
     node5.next = node6
     s = Solution()
-    res = s.swapPairs_2(node1)
+    res = s.swapPairs_recursive(node1)
     while res:
         print(res.val)
         res = res.next
